@@ -51,7 +51,7 @@ function getInput(url) {
         .then(html => {
             i = html.indexOf("input : ")
             j = html.indexOf("expected_output :")
-            tc = html.substring(i + 9, j - 9).replaceAll('\\u0022', '"').replaceAll('\\u000A', '\r\n')
+            tc = html.substring(i + 9, j - 9).replaceAll('\\u0022', '"').replaceAll('\\u000A', '\r\n').replaceAll('\\u002D', '-')
             if (!testCaseSet.has(tc)) {
                 textArea = document.querySelector('.myTestCase')
 
