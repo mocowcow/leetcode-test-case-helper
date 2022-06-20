@@ -35,34 +35,34 @@ function getTestCase() {
     } else {
         textArea.value = ''
     }
-    testCaseSet.clear()
     wrongAnwers = document.querySelectorAll('.error__B-Nx')
+    testCaseURL = new Set()
     for (wa of wrongAnwers) {
         url = wa.href
-        getInput(url)
+        testCaseURL.add(url)
     }
+    promises = []
+    for (url of testCaseURL) {
+        promises.push(fetch(url).then(res => res.text()))
+    }
+    Promise.all(promises).then(tcs => {
+        for (tc of tcs) {
+            setTestCase(tc)
+        }
+    }).catch(x => {
+        textArea.value = 'Failed'
+    })
 }
 
-function getInput(url) {
-    fetch(url)
-        .then(response => {
-            return response.text()
-        })
-        .then(html => {
-            i = html.indexOf("input : ")
-            j = html.indexOf("expected_output :")
-            tc = html.substring(i + 9, j - 9).replaceAll('\\u0022', '"').replaceAll('\\u000A', '\r\n').replaceAll('\\u002D', '-')
-            if (!testCaseSet.has(tc)) {
-                textArea = document.querySelector('.myTestCase')
+function setTestCase(html) {
+    i = html.indexOf("input : ")
+    j = html.indexOf("expected_output :")
+    tc = html.substring(i + 9, j - 9).replaceAll('\\u0022', '"').replaceAll('\\u000A', '\r\n').replaceAll('\\u002D', '-')
+    textArea = document.querySelector('.myTestCase')
+    textArea.value += tc + '\r\n'
 
-                textArea.value += tc + '\r\n'
-                // console.log(tc)
-                testCaseSet.add(tc)
-            }
-        })
 }
 
-testCaseSet = new Set()
 observer = new MutationObserver(handler)
 observer.observe(document, {
     attributes: true,
