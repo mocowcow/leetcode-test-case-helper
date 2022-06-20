@@ -2,7 +2,7 @@
 // @name         leetcode_test_case_helper
 // @description  get test cases of all WA verdict
 // @match        https://leetcode.com/problems/*/
-// @include      https://leetcode.com/problems/*/discuss
+// @exclude      https://leetcode.com/problems/*/discuss/*
 // @icon         https://www.google.com/s2/favicons?domain=leetcode.com
 // @run-at       document-end
 // ==/UserScript==
