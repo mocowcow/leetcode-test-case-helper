@@ -12,29 +12,26 @@
 function handler(event) {
     position = document.querySelector('.css-5wdlwo-TabViewHeader > div:nth-child(1)')
     createButton()
+    createTextArea()
     observer.disconnect()
 }
 
 function createButton() {
-    btn = document.createElement('div')
-    btn.innerHTML = '<button class="shuffle-handler__3Gzu css-6iyx43">Get Test Case</button>'
+    btn = document.createElement('button')
+    btn.innerHTML = 'Get Test Case'
     btn.onclick = getTestCase
     position.appendChild(btn)
 }
 
 function createTextArea() {
-    text = document.createElement('div')
-    text.innerHTML = '<textarea class="myTestCase" style="width:100px;height:30px"></textarea>'
-    position.appendChild(text)
+    textArea = document.createElement('textarea')
+    textArea.style.display = 'none'
+    position.appendChild(textArea)
 }
 
 function getTestCase() {
-    textArea = document.querySelector('.myTestCase')
-    if (!textArea) {
-        createTextArea()
-    } else {
-        textArea.value = ''
-    }
+    textArea.value = 'Loading...'
+    textArea.style.display = 'block'
     wrongAnwers = document.querySelectorAll('.error__B-Nx')
     testCaseURL = new Set()
     for (wa of wrongAnwers) {
@@ -46,6 +43,7 @@ function getTestCase() {
         promises.push(fetch(url).then(res => res.text()))
     }
     Promise.all(promises).then(tcs => {
+        textArea.value = ''
         for (tc of tcs) {
             setTestCase(tc)
         }
@@ -58,9 +56,7 @@ function setTestCase(html) {
     i = html.indexOf("input : ")
     j = html.indexOf("expected_output :")
     tc = html.substring(i + 9, j - 9).replaceAll('\\u0022', '"').replaceAll('\\u000A', '\r\n').replaceAll('\\u002D', '-')
-    textArea = document.querySelector('.myTestCase')
     textArea.value += tc + '\r\n'
-
 }
 
 observer = new MutationObserver(handler)
