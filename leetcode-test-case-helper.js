@@ -47,6 +47,7 @@ function getTestCase() {
         for (tc of tcs) {
             setTestCase(tc)
         }
+        navigator.clipboard.writeText(textArea.value)
     }).catch(x => {
         textArea.value = 'Failed'
     })
